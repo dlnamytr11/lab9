@@ -1,16 +1,41 @@
-# React + Vite
+# Лабораторная работа №9  
+# Каталог фильмов
+## Пример использованного API-запроса
+fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${movie.imdbID}`);
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img width="1920" height="1080" alt="image" src="https://github.com/dlnamytr11/lab9/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG"/>
+<img width="1920" height="1080" alt="image" src="https://github.com/dlnamytr11/lab9/blob/main/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA1.PNG"/>
 
-Currently, two official plugins are available:
+## Что делает useEffect в вашем приложении?
+### В этом приложении useEffect выполняет загрузку данных из внешнего API OMDb каждый раз, когда изменяется строка поиска (query).
+### Он выполняет побочный эффект, который не должен выполняться во время рендера, а только после него — именно для этого useEffect существует.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Какие состояния вы использовали и зачем?
+### 1.query — строка поиска. Хранит текст, который вводит пользователь. Когда query меняется → useEffect автоматически делает новый запрос к API.
 
-## React Compiler
+### 2. movies — список найденных фильмов. Содержит массив фильмов, полученных из OMDb API. Используется для отображения карточек в сетке.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 3. isLoading — индикатор загрузки. Показывает, идёт ли сейчас запрос. Нужно, чтобы выводить “Загрузка…” вместо пустого экрана.
 
-## Expanding the ESLint configuration
+### 4. error — текст ошибки. Хранит сообщение об ошибке: например, «Movie not found», «Ошибка сети», неверный ключ API и т.д. Отображается вместо карточек, если произошёл сбой.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 5. selectedMovie — выбранный фильм. Содержит фильм, на который нажал пользователь. Если состояние не null → открывается модальное окно с подробностями.
+
+## Что из документации API было важнее всего?
+### 1. Необходимость собственного API-ключа. Без корректного ключа сервер возвращает "Invalid API key" или пустые данные. Это критично, потому что ключ demo работает частично и часто ломается.
+
+### 2. Формат запросов и параметры
+### Документация объясняет, какие параметры обязательны:
+### s= — поиск по названию
+### i= — поиск по ID фильма
+### plot=full — расширенное описание
+### page= — постраничная выдача
+### Без правильных параметров API не возвращает нужных данных.
+
+### 3. Лимитации бесплатного тарифа
+### Документация предупреждает:
+### ограничение по количеству запросов в день;
+### ограниченная точность и неполные данные;
+### отсутствие некоторых полей;
+### возможные задержки.
+### Это объясняет, почему иногда API реагирует нестабильно.
